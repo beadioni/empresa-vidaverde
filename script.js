@@ -25,13 +25,23 @@ function render(filtro="todos"){
     `;
   })
 }
-render();
+function render(filtro="todos"){
+  if(!grid) return; // Evita erros se o elemento não existir na página
+  grid.innerHTML="";
+  produtos.filter(p=> filtro==="todos" || p.cat===filtro).forEach(p=>{
+    // Corrigido: Adicionamos a classe 'product-card' na div para puxar o seu CSS original!
+    grid.innerHTML+=`
+      <div class="product-card">
+        <div style="font-size:40px; text-align:center; margin-bottom:10px;">${p.emoji}</div>
+        <h3>${p.nome}</h3>
+        <p style="opacity:.7;font-size:14px">${p.desc}</p>
+        <div class="price">${p.preco}</div>
+        <button onclick="simularCompra('${p.nome}')">Comprar</button>
+      </div>
+    `;
+  })
+}
 
-document.querySelectorAll('.filter').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.filter').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    render(btn.dataset.filter);
   })
 })
 
