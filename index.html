@@ -116,7 +116,7 @@
 
   </div>
 </div>
-    <!-- Modal de Compra Fictícia -->
+    <!-- Modal de Compra Fictícia Atualizado -->
 <div id="modal-compra" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center;">
     <div style="background: white; padding: 30px; border-radius: 12px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-family: sans-serif;">
         
@@ -124,10 +124,11 @@
         <div id="compra-processando">
             <div class="spinner" style="border: 4px solid #f3f3f3; border-top: 4px solid #2ecc71; border-radius: 50%; width: 40px; height: 40px; animation: rodar 1s linear infinite; margin: 0 auto 20px;"></div>
             <h3 style="color: #333; margin-bottom: 10px;">Processando seu pagamento...</h3>
-            <p style="color: #666; font-size: 14px;">Aguarde a confirmação da sua compra fictícia.</p>
+            <!-- O JavaScript vai injetar o nome do produto aqui embaixo -->
+            <p style="color: #666; font-size: 14px;">Preparando seu pedido de: <strong id="nome-produto-modal" style="color: #2ecc71;"></strong></p>
         </div>
 
-        <!-- ESTADO 2: Sucesso (Inicia escondido) -->
+        <!-- ESTADO 2: Sucesso -->
         <div id="compra-sucesso" style="display: none;">
             <div style="font-size: 48px; margin-bottom: 15px;">🎉</div>
             <h3 style="color: #2ecc71; margin-bottom: 10px;">Compra Simulada com Sucesso!</h3>
@@ -138,7 +139,9 @@
     </div>
 </div>
 
-<!-- Estilo rápido apenas para fazer o círculo do carregamento girar -->
+<!-- Efeito sonoro de caixa registradora (áudio público e gratuito) -->
+<audio id="som-caixa" src="https://mixkit.co" preload="auto"></audio>
+
 <style>
     @keyframes rodar {
         0% { transform: rotate(0deg); }
