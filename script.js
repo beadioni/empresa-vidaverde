@@ -11,9 +11,9 @@ const grid = document.getElementById('productGrid');
 let cart = 0;
 
 function render(filtro="todos"){
+  if(!grid) return; // Evita erros se o elemento não existir na página
   grid.innerHTML="";
   produtos.filter(p=> filtro==="todos" || p.cat===filtro).forEach(p=>{
-    // Alterado: Agora passamos o nome do produto dentro da função simularCompra
     grid.innerHTML+=`
       <div class="product">
         <div style="font-size:40px">${p.emoji}</div>
@@ -35,70 +35,70 @@ document.querySelectorAll('.filter').forEach(btn=>{
   })
 })
 
-// Mantido a lógica caso queira usar para outra função no futuro
 function addCart(){
   cart++;
-  document.getElementById('cartCount').innerText=cart;
-  let bar = document.getElementById('progressBar');
-  let txt = document.getElementById('impactText');
-  bar.style.width = Math.min(cart*20,100)+"%";
-  txt.innerText = `Incrível! Você já compensou ${cart*0.8}kg de CO2 e apoia agricultura familiar.`;
-  document.getElementById('co2').innerText = (cart*0.8).toFixed(1)+"kg";
+  const cartCount = document.getElementById('cartCount');
+  const bar = document.getElementById('progressBar');
+  const txt = document.getElementById('impactText');
+  const co2 = document.getElementById('co2');
+
+  if(cartCount) cartCount.innerText=cart;
+  if(bar) bar.style.width = Math.min(cart*20,100)+"%";
+  if(txt) txt.innerText = `Incrível! Você já compensou ${cart*0.8}kg de CO2 e apoia agricultura familiar.`;
+  if(co2) co2.innerText = (cart*0.8).toFixed(1)+"kg";
 }
 
 // Tema
-document.getElementById('themeToggle').onclick = () =>{
-  document.body.classList.toggle('dark');
-  document.getElementById('themeToggle').innerText = document.body.classList.contains('dark') ? "🌙" : "☀️";
+const themeToggle = document.getElementById('themeToggle');
+if(themeToggle) {
+  themeToggle.onclick = () =>{
+    document.body.classList.toggle('dark');
+    themeToggle.innerText = document.body.classList.contains('dark') ? "🌙" : "☀️";
+  }
 }
 
 // Quiz
-function openQuiz(){document.getElementById('quizModal').style.display='flex'}
-function closeQuiz(){document.getElementById('quizModal').style.display='none'}
+function openQuiz(){ const q = document.getElementById('quizModal'); if(q) q.style.display='flex'; }
+function closeQuiz(){ const q = document.getElementById('quizModal'); if(q) q.style.display='none'; }
 function answerQuiz(tipo){
   let res = document.getElementById('quizResult');
+  if(!res) return;
   if(tipo==="energia") res.innerText="Recomendamos: Chá Energy + Grão Vivo Quinoa";
   if(tipo==="calma") res.innerText="Recomendamos: Chá Calm + Suplemento Ashwagandha";
   if(tipo==="foco") res.innerText="Recomendamos: Suplemento Green Clorella + Lentilha Orgânica";
 }
 
 // ==========================================
-// NOVA PARTE: LÓGICA DA COMPRA FICTÍCIA
+// LÓGICA DA COMPRA FICTÍCIA
 // ==========================================
-
-// Mapeia os elementos do modal e áudio que estão no HTML
-const modalCompra = document.getElementById('modal-compra');
-const telaProcessando = document.getElementById('compra-processando');
-const telaSucesso = document.getElementById('compra-sucesso');
-const btnFecharModal = document.getElementById('btn-fechar-modal');
-const nomeProdutoModal = document.getElementById('nome-produto-modal');
-const somCaixa = document.getElementById('som-caixa');
-
 function simularCompra(nomeDoProduto) {
-  // Injeta o nome do produto dinamicamente no modal
-  nomeProdutoModal.innerText = nomeDoProduto;
+  const modalCompra = document.getElementById('modal-compra');
+  const telaProcessando = document.getElementById('compra-processando');
+  const telaSucesso = document.getElementById('compra-sucesso');
+  const nomeProdutoModal = document.getElementById('nome-produto-modal');
+  const somCaixa = document.getElementById('som-caixa');
 
-  // Abre o modal na tela
-  modalCompra.style.display = 'flex';
-  telaProcessando.style.display = 'block';
-  telaSucesso.style.display = 'none';
+  if(nomeProdutoModal) nomeProdutoModal.innerText = nomeDoProduto;
+  if(modalCompra) modalCompra.style.display = 'flex';
+  if(telaProcessando) telaProcessando.style.display = 'block';
+  if(telaSucesso) telaSucesso.style.display = 'none';
 
-  // Executa as ações do carrinho/CO2 junto com a compra para manter o contador funcionando!
   addCart();
 
-  // Espera 2 segundos para simular o pagamento fictício
   setTimeout(() => {
-    telaProcessando.style.display = 'none';
-    telaSucesso.style.display = 'block';
+    if(telaProcessando) telaProcessando.style.display = 'none';
+    if(telaSucesso) telaSucesso.style.display = 'block';
     
-    // Toca o som de caixa registradora
-    somCaixa.play().catch(erro => {
-        console.log("O navegador bloqueou o áudio automático: ", erro);
-    });
+    if(somCaixa) {
+      somCaixa.play().catch(erro => console.log("Áudio bloqueado:", erro));
+    }
   }, 2000);
 }
 
-// Fecha o modal ao clicar no botão de voltar
-btnFecharModal.addEventListener('click', () => {
-  modalCompra.style.display = 'none';
+// Evento para fechar o modal
+document.addEventListener('click', (e) => {
+  if(e.target && e.target.id === 'btn-fechar-modal') {
+    const modalCompra = document.getElementById('modal-compra');
+    if(modalCompra) modalCompra.style.display = 'none';
+  }
 });
